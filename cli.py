@@ -11,7 +11,7 @@ client = docker.from_env()
 IMAGE_NAME = os.environ.get('SPAWNER_IMAGE_NAME')
 if not IMAGE_NAME:
     raise ValueError("No SPAWNER_IMAGE_NAME set")
-TIME_LIMIT = os.environ.get('SPAWNER_TIME_LIMIT', 15 * 60)
+TIME_LIMIT = int(os.environ.get('SPAWNER_TIME_LIMIT', 15 * 60))
 
 def kill_containers():
     containers = client.containers.list(
@@ -28,6 +28,7 @@ def kill_containers():
             if diff < TIME_LIMIT:
                 continue
 
+            print("Try to kill container", container.name)
             if container.status != 'exited':
                 container.kill()
             container.remove()
