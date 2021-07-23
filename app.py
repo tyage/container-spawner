@@ -35,13 +35,15 @@ def index():
 def new_instance():
     # TODO: check recaptcha
     exposed_port = random_port()
+    username = random_string()
+    password = random_string()
     container = client.containers.run(IMAGE_NAME,
         detach=True,
         ports={
             CONTAINER_PORT: exposed_port,
         },
         environment={
-            SPAWNER_USERNAME_ENV: random_string(),
-            SPAWNER_PASSWORD_ENV: random_string()
+            SPAWNER_USERNAME_ENV: username,
+            SPAWNER_PASSWORD_ENV: password
         })
-    return render_template('index.html', port=exposed_port)
+    return render_template('index.html', port=exposed_port, username=username, password=password)
