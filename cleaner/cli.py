@@ -4,7 +4,9 @@ import time
 from dateutil import parser
 from datetime import datetime, timezone
 
-def kill_containers(client, image_name, time_limit):
+from docker.client import DockerClient
+
+def kill_containers(client: DockerClient, image_name: str, time_limit: int):
     containers = client.containers.list(
       all=True,
       filters={'ancestor': image_name}

@@ -23,7 +23,7 @@ def random_port():
     # TODO: exclude used port
     return random.randint(PORT_MIN, PORT_MAX)
 
-def random_string(length = 16):
+def random_string(length: int = 16):
     letters = string.ascii_letters + string.digits
     return "".join(random.sample(string.ascii_letters, length))
 
