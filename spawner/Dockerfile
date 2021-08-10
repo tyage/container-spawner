@@ -8,4 +8,6 @@ RUN sh -c 'PIPENV_VENV_IN_PROJECT=1 pipenv install'
 
 COPY . /app/
 
-CMD .venv/bin/python -mapp.py
+RUN /app/.venv/bin/pip3 install six
+
+CMD .venv/bin/flask run --host 0.0.0.0
