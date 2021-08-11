@@ -13,6 +13,7 @@ if not IMAGE_NAME:
 CONTAINER_PORT = os.environ.get('SPAWNER_CONTAINER_PORT')
 if not CONTAINER_PORT:
     raise ValueError("No SPAWNER_CONTAINER_PORT set")
+SPAWNER_HOSTNAME = os.environ.get('SPAENER_HOSTNAME', 'localhost') # hostname of a user access URL
 SPAWNER_USERNAME_ENV = os.environ.get('SPAWNER_USERNAME_ENV', 'CS_USERNAME')
 SPAWNER_PASSWORD_ENV = os.environ.get('SPAWNER_PASSWORD_ENV', 'CS_PASSWORD')
 PORT_MIN = os.environ.get('SPAWNER_PORT_MIN', 62000)
@@ -46,4 +47,4 @@ def new_instance():
             SPAWNER_USERNAME_ENV: username,
             SPAWNER_PASSWORD_ENV: password
         })
-    return render_template('index.html', port=exposed_port, username=username, password=password)
+    return render_template('index.html', port=exposed_port, username=username, password=password, host=SPAWNER_HOSTNAME, time_limit=TIME_LIMIT)

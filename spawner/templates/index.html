@@ -20,8 +20,17 @@
     <form action="/" method="POST">
       <button type="submit" class="btn btn-primary">New instance</button>
     </form>
-  </main>
 
+    {% if port %}
+    {% set url = "http://{}:{}@{}:{}/".format(username, password, host, port) %}
+    <div>
+      <p>New instance was spawned! It lives for {{ time_limit }} seconds.</p>
+      <p>
+        <a href="{{ url }}" target="_blank">{{ url }}</a>
+      </p>
+    </div>
+    {% endif %}
+  </main>
 
 </body>
 
