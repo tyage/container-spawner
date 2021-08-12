@@ -30,7 +30,7 @@ def random_string(length: int = 16):
     letters = string.ascii_letters + string.digits
     return "".join(random.sample(string.ascii_letters, length))
 
-class SpawnForm(FlaskForm):
+class SpawnerForm(FlaskForm):
     if RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY:
         recaptcha = RecaptchaField()
 
@@ -46,12 +46,12 @@ if RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY:
 
 @app.get("/")
 def index():
-    form = SpawnForm()
+    form = SpawnerForm()
     return render_template('index.html', form=form)
 
 @app.post("/")
 def new_instance():
-    form = SpawnForm()
+    form = SpawnerForm()
     if not form.validate_on_submit():
         return "invalid request"
 
