@@ -18,6 +18,8 @@
     <h1>Container Spawner</h1>
 
     <form action="/" method="POST">
+      {{ form.csrf_token }}
+      {{ form.recaptcha }}
       <button type="submit" class="btn btn-primary">New instance</button>
     </form>
 
