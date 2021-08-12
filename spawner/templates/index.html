@@ -15,20 +15,25 @@
 <body class="container">
 
   <main class="col-6">
-    <h1>Container Spawner</h1>
+    <h1 class="mt-5 mb-4">Container Spawner</h1>
 
     <form action="/" method="POST">
       {{ form.csrf_token }}
-      {{ form.recaptcha }}
-      <button type="submit" class="btn btn-primary">New instance</button>
+      <div class="mb-3">
+        {{ form.recaptcha }}
+      </div>
+      <div class="mb-3">
+        <button type="submit" class="btn btn-primary">New instance</button>
+      </div>
     </form>
 
     {% if port %}
     {% set url = "http://{}:{}@{}:{}/".format(username, password, host, port) %}
-    <div>
-      <p>New instance was spawned! It lives for {{ time_limit }} seconds.</p>
+    <div class="alert alert-primary">
+      <h4 class="alert-heading">New instance spawned!</h4>
+      <p>It lives for {{ time_limit }} seconds.</p>
       <p>
-        <a href="{{ url }}" target="_blank">{{ url }}</a>
+        <a href="{{ url }}" target="_blank" class="alert-link">{{ url }}</a>
       </p>
     </div>
     {% endif %}
