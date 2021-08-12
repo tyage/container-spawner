@@ -6,8 +6,8 @@ WORKDIR /app
 COPY Pipfile Pipfile.lock /app/
 RUN sh -c 'PIPENV_VENV_IN_PROJECT=1 pipenv install'
 
-COPY . /app/
-
 RUN /app/.venv/bin/pip3 install six
+
+COPY . /app/
 
 CMD .venv/bin/flask run --host 0.0.0.0

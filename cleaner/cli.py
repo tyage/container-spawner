@@ -25,6 +25,7 @@ def kill_containers(client: DockerClient, image_name: str, time_limit: int):
             if container.status != 'exited':
                 container.kill()
             container.remove()
+            print("Done", container.name)
         except:
             print("Failed to kill container", container.name)
             True
