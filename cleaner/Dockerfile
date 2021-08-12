@@ -6,8 +6,6 @@ WORKDIR /app
 COPY Pipfile Pipfile.lock /app/
 RUN sh -c 'PIPENV_VENV_IN_PROJECT=1 pipenv install'
 
-RUN /app/.venv/bin/pip3 install six
-
 COPY . /app/
 
 CMD .venv/bin/python -u cli.py
