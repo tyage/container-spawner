@@ -68,3 +68,6 @@ def new_instance():
             SPAWNER_PASSWORD_ENV: password
         })
     return render_template('index.html', form=form, port=exposed_port, username=username, password=password, host=SPAWNER_HOSTNAME, time_limit=TIME_LIMIT)
+
+if __name__ == '__main__':
+    app.run()
