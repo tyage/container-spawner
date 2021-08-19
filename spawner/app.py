@@ -4,6 +4,7 @@ import docker
 import os
 import random
 import string
+import json
 
 # Environment settings
 IMAGE_NAME = os.environ.get('SPAWNER_IMAGE_NAME')
@@ -18,6 +19,11 @@ SPAWNER_PASSWORD_ENV = os.environ.get('SPAWNER_PASSWORD_ENV', 'CS_PASSWORD')
 PORT_MIN = os.environ.get('SPAWNER_PORT_MIN', 62000)
 PORT_MAX = os.environ.get('SPAWNER_PORT_MAX', 65000)
 TIME_LIMIT = os.environ.get('SPAWNER_TIME_LIMIT', 15 * 60)
+CONTAINER_ARGS = os.environ.get('CONTAINER_ARGS') # should be JSON string
+if CONTAINER_ARGS:
+    CONTAINER_ARGS = json.loads(CONTAINER_ARGS)
+else:
+    CONTAINER_ARGS = {}
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
 
@@ -58,15 +64,18 @@ def new_instance():
     exposed_port = random_port()
     username = random_string()
     password = random_string()
-    container = client.containers.run(IMAGE_NAME,
-        detach=True,
-        ports={
+    args = {
+        'detach': True,
+        'ports': {
             CONTAINER_PORT: exposed_port,
         },
-        environment={
+        'environment': {
             SPAWNER_USERNAME_ENV: username,
             SPAWNER_PASSWORD_ENV: password
-        })
+        },
+        **CONTAINER_ARGS
+    }
+    container = client.containers.run(IMAGE_NAME, **args)
     return render_template('index.html', form=form, port=exposed_port, username=username, password=password, host=SPAWNER_HOSTNAME, time_limit=TIME_LIMIT)
 
 if __name__ == '__main__':
