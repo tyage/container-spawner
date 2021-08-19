@@ -19,7 +19,7 @@ SPAWNER_PASSWORD_ENV = os.environ.get('SPAWNER_PASSWORD_ENV', 'CS_PASSWORD')
 PORT_MIN = os.environ.get('SPAWNER_PORT_MIN', 62000)
 PORT_MAX = os.environ.get('SPAWNER_PORT_MAX', 65000)
 TIME_LIMIT = os.environ.get('SPAWNER_TIME_LIMIT', 15 * 60)
-CONTAINER_ARGS = os.environ.get('CONTAINER_ARGS') # should be JSON string
+CONTAINER_ARGS = os.environ.get('SPAWNER_CONTAINER_ARGS') # should be JSON string
 if CONTAINER_ARGS:
     CONTAINER_ARGS = json.loads(CONTAINER_ARGS)
 else:
