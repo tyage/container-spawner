@@ -61,21 +61,23 @@ def new_instance():
     if not form.validate_on_submit():
         return "invalid request"
 
+    args = {
+        'detach': True,
+        'ports': {},
+        'environment': {},
+        **CONTAINER_ARGS
+    }
+    # override some args with random string
     exposed_port = random_port()
     username = random_string()
     password = random_string()
-    args = {
-        'detach': True,
-        'ports': {
-            CONTAINER_PORT: exposed_port,
-        },
-        'environment': {
-            SPAWNER_USERNAME_ENV: username,
-            SPAWNER_PASSWORD_ENV: password
-        },
-        **CONTAINER_ARGS
-    }
+    args['ports'][CONTAINER_PORT] = exposed_port
+    args['environment'][SPAWNER_USERNAME_ENV] = username
+    args['environment'][SPAWNER_PASSWORD_ENV] = password
+
     container = client.containers.run(IMAGE_NAME, **args)
+    # TODO: check if container is successfully spawned
+
     return render_template('index.html', form=form, port=exposed_port, username=username, password=password, host=SPAWNER_HOSTNAME, time_limit=TIME_LIMIT)
 
 if __name__ == '__main__':
