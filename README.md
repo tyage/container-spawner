@@ -21,7 +21,7 @@ You can update configuration with environments
 |SPAWNER_PORT_MIN|Min random port.|62000|
 |SPAWNER_PORT_MAX|Max random port.|65000|
 |SPAWNER_TIME_LIMIT|Life time of the spawned container.|900|
-|SPAWNER_CONTAINER_ARGS|JSON string which represents [an parameters for running container](https://docker-py.readthedocs.io/en/stable/containers.html)||
+|SPAWNER_CONTAINER_ARGS|JSON string which represents [parameters for running container](https://docker-py.readthedocs.io/en/stable/containers.html). e.g. `{"environment":{"NODE_ENV":"production"}}`||
 |RECAPTCHA_PUBLIC_KEY|Recaptcha site key.||
 |RECAPTCHA_PRIVATE_KEY|Recaptcha secret key.||
 
