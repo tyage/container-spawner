@@ -1,0 +1,20 @@
+version: '3'
+services:
+  spawner:
+    image: ghcr.io/tyage/container-spawner:latest
+    environment:
+      - SPAWNER_IMAGE_NAME=denoland/deno:1.13.2
+      - SPAWNER_TIME_LIMIT=600
+      - SPAWNER_CONTAINER_PORT=1993
+      - SPAWNER_CONTAINER_ARGS={"volumes":{"$PWD/main.ts":{"bind":"/app/main.ts","mode":"ro"}},"command":"run --allow-net --allow-env /app/main.ts"}
+    ports:
+      - "5000:5000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  cleaner:
+    image: ghcr.io/tyage/container-spawner-cleaner:latest
+    environment:
+      - SPAWNER_IMAGE_NAME=denoland/deno:1.13.2
+      - SPAWNER_TIME_LIMIT=600
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock     

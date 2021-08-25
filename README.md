@@ -1,5 +1,12 @@
 # Container Spawner
 
+A web app which provides private and temporary containers for visitors.
+
+Container Spawner publish containers with random port and generate random password to access them.
+
+Need an example?
+Try [this sample app](./example/).
+
 ## Spawner App
 
 [![build and push spawner](https://github.com/tyage/container-spawner/actions/workflows/push-spawner.yml/badge.svg)](https://github.com/tyage/container-spawner/actions/workflows/push-spawner.yml)

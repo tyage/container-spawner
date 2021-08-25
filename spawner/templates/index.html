@@ -28,14 +28,14 @@
         {{ form.recaptcha }}
       </div>
       <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Spawn instance</button>
+        <button type="submit" class="btn btn-primary">Spawn container</button>
       </div>
     </form>
 
     {% if port %}
     {% set url = "http://{}:{}@{}:{}/".format(username, password, host, port) %}
     <div class="alert alert-primary">
-      <h4 class="alert-heading">New instance spawned!</h4>
+      <h4 class="alert-heading">New container spawned!</h4>
       <p>It lives for {{ time_limit }} seconds.</p>
       <p>
         <a href="{{ url }}" target="_blank" class="alert-link">{{ url }}</a>
