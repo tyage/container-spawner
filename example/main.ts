@@ -1,11 +1,8 @@
 import { serve, ServerRequest } from "https://deno.land/std@0.106.0/http/server.ts";
 import { decode } from "https://deno.land/std@0.106.0/encoding/base64.ts";
 
-const PORT = 1993;
-const s = serve(`0.0.0.0:${PORT}`);
-
 // simple basic auth implementation
-// we can use CS_USERNAME and CS_PASSWORD passed from Container Spawner
+// we can use CS_USERNAME and CS_PASSWORD which come from Container Spawner
 const basicAuthUser = Deno.env.get('CS_USERNAME');
 const basicAuthPassword = Deno.env.get('CS_PASSWORD');
 const verifyBasicAuth = (req: ServerRequest) => {
@@ -19,7 +16,11 @@ const verifyBasicAuth = (req: ServerRequest) => {
   return (user === basicAuthUser && password === basicAuthPassword);
 };
 
+// start app
+const PORT = 1993;
+const s = serve(`0.0.0.0:${PORT}`);
 console.log(`Server started on port ${PORT}`);
+
 for await (const req of s) {
   if (verifyBasicAuth(req)) {
     // verified!
