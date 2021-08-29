@@ -31,6 +31,7 @@ You can update configuration with environments
 |SPAWNER_CONTAINER_ARGS|JSON string which represents [parameters for running container](https://docker-py.readthedocs.io/en/stable/containers.html). e.g. `{"environment":{"NODE_ENV":"production"}}`||
 |RECAPTCHA_PUBLIC_KEY|Recaptcha site key.||
 |RECAPTCHA_PRIVATE_KEY|Recaptcha secret key.||
+|SECRET_KEY|Secret key for flask. Need to be set if you run spawner for multi process.||
 
 ## Cleaner App
 

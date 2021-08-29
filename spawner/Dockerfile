@@ -11,4 +11,4 @@ RUN /app/.venv/bin/pip3 install six
 
 COPY . /app/
 
-CMD .venv/bin/flask run --host 0.0.0.0
+CMD .venv/bin/gunicorn -b :5000 app:app

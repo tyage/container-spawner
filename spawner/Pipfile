@@ -8,6 +8,7 @@ flask = "*"
 docker = "*"
 flask-wtf = "*"
 six = "*"
+gunicorn = "*"
 
 [dev-packages]
 
