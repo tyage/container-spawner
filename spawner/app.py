@@ -28,6 +28,7 @@ else:
     CONTAINER_ARGS = {}
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # Utilities
 
@@ -51,7 +52,7 @@ class SpawnerForm(FlaskForm):
 app = Flask(__name__)
 client = docker.from_env()
 
-app.config['SECRET_KEY'] = random_string()
+app.config['SECRET_KEY'] = SECRET_KEY if SECRET_KEY else random_string()
 
 if RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY:
     app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
