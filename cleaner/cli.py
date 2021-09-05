@@ -27,8 +27,11 @@ def kill_containers(client: DockerClient, image_name: str, time_limit: int):
             container.remove()
             print("Done", container.name)
         except:
-            print("Failed to kill container", container.name)
-            True
+            print("Failed to kill container. Try remove.", container.name)
+            try:
+                container.remove()
+            except:
+                True
 
 if __name__ == '__main__':
     client = docker.from_env()
