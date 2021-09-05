@@ -11,4 +11,4 @@ RUN /app/.venv/bin/pip3 install six
 
 COPY . /app/
 
-CMD .venv/bin/gunicorn -b :5000 app:app
+CMD .venv/bin/gunicorn -b :5000 --access-logfile - --error-logfile - app:app

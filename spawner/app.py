@@ -1,8 +1,10 @@
 from flask import Flask, render_template
 import docker
+from docker.errors import APIError
 import os
 import json
-from .helpers import random_port, random_string, spawner_form
+import logging
+from helpers import random_port, random_string, spawner_form
 
 # Environment settings
 IMAGE_NAME = os.environ.get('SPAWNER_IMAGE_NAME')
@@ -32,6 +34,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 app = Flask(__name__)
 client = docker.from_env()
 
+app.logger.setLevel(logging.INFO)
 app.config['SECRET_KEY'] = SECRET_KEY if SECRET_KEY else random_string()
 
 if RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY:
@@ -65,8 +68,14 @@ def new_instance():
     args['environment'][SPAWNER_USERNAME_ENV] = username
     args['environment'][SPAWNER_PASSWORD_ENV] = password
 
-    container = client.containers.run(IMAGE_NAME, **args)
-    # TODO: check if container is successfully spawned
+    try:
+        container = client.containers.run(IMAGE_NAME, **args)
+        app.logger.info('spawned: %s', container.name)
+    except APIError as error:
+        # failed to spawn container
+        app.logger.info('spawn failed: %s', str(error))
+        message = 'Failed to spawn continer :( Please try again.'
+        return render_template('index.html', form=form, error=message)
 
     return render_template('index.html', form=form, port=exposed_port, username=username, password=password, host=SPAWNER_HOSTNAME, time_limit=TIME_LIMIT)
 

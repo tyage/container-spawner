@@ -41,6 +41,11 @@
         <a href="{{ url }}" target="_blank" class="alert-link">{{ url }}</a>
       </p>
     </div>
+    {% elif error %}
+    <div class="alert alert-danger">
+      <h4 class="alert-heading">Error!</h4>
+      <p>{{ error }}</p>
+    </div>
     {% endif %}
   </main>
 
