@@ -1,10 +1,8 @@
 from flask import Flask, render_template
-from flask_wtf import FlaskForm, RecaptchaField
 import docker
 import os
-import random
-import string
 import json
+from .helpers import random_port, random_string, spawner_form
 
 # Environment settings
 IMAGE_NAME = os.environ.get('SPAWNER_IMAGE_NAME')
@@ -30,24 +28,6 @@ RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
-# Utilities
-
-
-def random_port():
-    # TODO: exclude used port
-    return random.randint(PORT_MIN, PORT_MAX)
-
-
-def random_string(length: int = 16):
-    letters = string.ascii_letters + string.digits
-    return "".join(random.sample(string.ascii_letters, length))
-
-
-class SpawnerForm(FlaskForm):
-    if RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY:
-        recaptcha = RecaptchaField()
-
-
 # Setup app
 app = Flask(__name__)
 client = docker.from_env()
@@ -61,13 +41,13 @@ if RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY:
 
 @app.get("/")
 def index():
-    form = SpawnerForm()
+    form = spawner_form(RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY)
     return render_template('index.html', form=form)
 
 
 @app.post("/")
 def new_instance():
-    form = SpawnerForm()
+    form = spawner_form(RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY)
     if not form.validate_on_submit():
         return "invalid request"
 
@@ -78,7 +58,7 @@ def new_instance():
         **CONTAINER_ARGS
     }
     # override some args with random string
-    exposed_port = random_port()
+    exposed_port = random_port(PORT_MIN, PORT_MAX)
     username = random_string()
     password = random_string()
     args['ports'][CONTAINER_PORT] = exposed_port
