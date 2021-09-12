@@ -9,7 +9,6 @@ class SpawnerFormWithRecaptcha(FlaskForm):
 
 
 def random_port(min: int, max: int):
-    # TODO: exclude used port
     return random.randint(min, max)
 
 
