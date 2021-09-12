@@ -4,7 +4,7 @@ from docker.errors import APIError
 import os
 import json
 import logging
-from helpers import random_port, random_string, spawner_form
+from helpers import random_string, spawner_form, spawn_container_with_random_port
 
 # Environment settings
 IMAGE_NAME = os.environ.get('SPAWNER_IMAGE_NAME')
@@ -56,20 +56,24 @@ def new_instance():
 
     args = {
         'detach': True,
-        'ports': {},
         'environment': {},
         **CONTAINER_ARGS
     }
     # override some args with random string
-    exposed_port = random_port(PORT_MIN, PORT_MAX)
     username = random_string()
     password = random_string()
-    args['ports'][CONTAINER_PORT] = exposed_port
     args['environment'][SPAWNER_USERNAME_ENV] = username
     args['environment'][SPAWNER_PASSWORD_ENV] = password
 
     try:
-        container = client.containers.run(IMAGE_NAME, **args)
+        container, exposed_port = spawn_container_with_random_port(
+            docker_client=client,
+            image_name=IMAGE_NAME,
+            source_port=CONTAINER_PORT,
+            port_min=PORT_MIN,
+            port_max=PORT_MAX,
+            args=args
+        )
         app.logger.info('spawned: %s', container.name)
     except APIError as error:
         # failed to spawn container
