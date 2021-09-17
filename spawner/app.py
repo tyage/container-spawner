@@ -14,7 +14,7 @@ CONTAINER_PORT = os.environ.get('SPAWNER_CONTAINER_PORT')
 if not CONTAINER_PORT:
     raise ValueError("No SPAWNER_CONTAINER_PORT set")
 # hostname of a user access URL
-SPAWNER_HOSTNAME = os.environ.get('SPAENER_HOSTNAME', 'localhost')
+SPAWNER_HOSTNAME = os.environ.get('SPAWNER_HOSTNAME', 'localhost')
 SPAWNER_USERNAME_ENV = os.environ.get('SPAWNER_USERNAME_ENV', 'CS_USERNAME')
 SPAWNER_PASSWORD_ENV = os.environ.get('SPAWNER_PASSWORD_ENV', 'CS_PASSWORD')
 PORT_MIN = int(os.environ.get('SPAWNER_PORT_MIN', 62000))
