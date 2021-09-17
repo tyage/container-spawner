@@ -4,7 +4,7 @@ from docker.errors import APIError
 import os
 import json
 import logging
-from helpers import random_string, spawner_form, spawn_container_with_random_port
+from helpers import random_string, spawner_form, spawn_container_with_random_port, number_of_running_containers
 
 # Environment settings
 IMAGE_NAME = os.environ.get('SPAWNER_IMAGE_NAME')
@@ -20,6 +20,7 @@ SPAWNER_PASSWORD_ENV = os.environ.get('SPAWNER_PASSWORD_ENV', 'CS_PASSWORD')
 PORT_MIN = int(os.environ.get('SPAWNER_PORT_MIN', 62000))
 PORT_MAX = int(os.environ.get('SPAWNER_PORT_MAX', 65000))
 TIME_LIMIT = os.environ.get('SPAWNER_TIME_LIMIT', 15 * 60)
+SPAWNER_MAX_CONTAINER = int(os.environ.get('SPAWNER_MAX_CONTAINER', -1))
 CONTAINER_ARGS = os.environ.get('SPAWNER_CONTAINER_ARGS')
 if CONTAINER_ARGS:
     # should be JSON string
@@ -45,11 +46,19 @@ if RECAPTCHA_PUBLIC_KEY and RECAPTCHA_PRIVATE_KEY:
 @app.get("/")
 def index():
     form = spawner_form(RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY)
-    return render_template('index.html', form=form)
+
+    running_containers = number_of_running_containers(client, IMAGE_NAME)
+    service_avaialbe = SPAWNER_MAX_CONTAINER <= 0 or running_containers < SPAWNER_MAX_CONTAINER
+
+    return render_template('index.html', form=form, service_available=service_avaialbe)
 
 
 @app.post("/")
 def new_instance():
+    running_containers = number_of_running_containers(client, IMAGE_NAME)
+    if SPAWNER_MAX_CONTAINER > 0 and running_containers > SPAWNER_MAX_CONTAINER:
+        return "Sorry, we are currently unavailable to spawn new instance"
+
     form = spawner_form(RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY)
     if not form.validate_on_submit():
         return "invalid request"
@@ -81,7 +90,7 @@ def new_instance():
         message = 'Failed to spawn continer :( Please try again.'
         return render_template('index.html', form=form, error=message)
 
-    return render_template('index.html', form=form, port=exposed_port, username=username, password=password, host=SPAWNER_HOSTNAME, time_limit=TIME_LIMIT)
+    return render_template('index.html', form=form, port=exposed_port, username=username, password=password, host=SPAWNER_HOSTNAME, time_limit=TIME_LIMIT, service_available=True)
 
 
 if __name__ == '__main__':

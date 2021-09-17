@@ -22,6 +22,7 @@
   <main class="col-6 text-center">
     <h1 class="mb-5">Container Spawner</h1>
 
+    {% if service_available %}
     <form action="/" method="POST">
       {{ form.csrf_token }}
       <div class="mb-3">
@@ -31,6 +32,11 @@
         <button type="submit" class="btn btn-primary">Spawn container</button>
       </div>
     </form>
+    {% else %}
+    <h2>Sorry, we are currently unavailable to spawn new instance. Please wait a while until our resources are
+      available.</h2>
+    {% endif %}
+
 
     {% if port %}
     {% set url = "http://{}:{}@{}:{}/".format(username, password, host, port) %}

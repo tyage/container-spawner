@@ -44,3 +44,11 @@ def spawn_container_with_random_port(docker_client, image_name, source_port,
 
     # return last error if all trials failed
     raise last_error
+
+
+def number_of_running_containers(docker_client, image_name):
+    containers = docker_client.containers.list(
+        all=True,
+        filters={'ancestor': image_name}
+    )
+    return len(containers)
