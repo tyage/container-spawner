@@ -6,11 +6,17 @@ from datetime import datetime, timezone
 
 from docker.client import DockerClient
 
+
 def kill_containers(client: DockerClient, image_name: str, time_limit: int):
-    containers = client.containers.list(
-      all=True,
-      filters={'ancestor': image_name}
-    )
+    try:
+        containers = client.containers.list(
+            all=True,
+            filters={'ancestor': image_name}
+        )
+    except:
+        print("Failed to fetch containers... try again later...")
+        return True
+
     for container in containers:
         try:
             # skip if container is younger than time limit
@@ -32,6 +38,7 @@ def kill_containers(client: DockerClient, image_name: str, time_limit: int):
                 container.remove()
             except:
                 True
+
 
 if __name__ == '__main__':
     client = docker.from_env()
